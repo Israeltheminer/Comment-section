@@ -1,0 +1,148 @@
+<body class="bg-[#f5f6fa]">
+	
+	<main class="w-[725px] mx-auto my-[4rem]">
+		<% function pasteComment(array){ %>
+		<% 	array.forEach(element => { %>
+		<div class="comment-section">
+			<div class="comment-box bg-white min-h-[175px] rounded-xl relative mt-[2rem]">
+				<div class="comment flex">
+					<div class="ranking bg-[#eaecf1] grid grid-cols-1 min-w-[50px] items-center justify-around h-[7.5rem] rounded-xl m-6 w-[50px]">
+						<div class="mx-auto mt-2">
+							<img class="cursor-pointer" src="dist/assets/images/icon-plus.svg">
+						</div>
+						<div class="mx-auto mt-2">
+							<span class="font-bold text-[#484ba3] opacity-80"><%= element.score %></span>
+						</div>
+						<div class="mx-auto mb-2"><img class="cursor-pointer" src="dist/assets/images/icon-minus.svg"></div>
+					</div>
+					<div class="comment_details">
+						<div class="details flex items-center gap-4 mt-6 mb-3">
+							<span class="user_img"><img class="w-[2.5rem]" src="dist/assets/images/avatars/image-<%= element.username %>.png"></span>
+							<span class="user_name text-[#324152] font-bold opacity-90"><%= element.username %></span>
+							<span class="you hide bg-blue-600 text-white px-1">you</span>
+							<span class="comment-date text-[#324152cd] font-light opacity-50">1 month ago</span>
+						</div>
+						<div class="comment_paragraph mr-6">
+							<p><%= element.content %></p>
+						</div>
+					</div>
+					<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide">
+						<span><img src="dist/assets/images/icon-reply.svg"></span>
+						<span class="font-bold text-[#484ba3] opacity-80 ml-3">Reply</span>
+					</div>
+					<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
+						<div class="flex">
+							<div class="my-auto">
+								<img src="dist/assets/images/icon-delete.svg">
+							</div>
+							<span class="font-bold text-[#ed6468] ml-2">Delete</span>
+						</div>
+						<div class="flex">
+							<div class="my-auto">
+								<img src="dist/assets/images/icon-edit.svg">
+							</div>
+							<p class="font-bold text-[#484ba3] ml-2">Edit</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="reply-box pl-12 ml-12 border-l-2 border-[#67727e68]">
+				<% let replies = element.replies %>
+				<% if (replies!==0) { %>
+				<% pasteReplies(replies)%>
+					<% function pasteReplies(repliesArray){ %>
+							<% repliesArray.forEach(element => { %>
+								<div>
+									<div class="comment-box bg-white min-h-[175px] rounded-xl relative mt-[2rem]">
+										<div class="comment flex">
+											<div class="ranking bg-[#eaecf1] grid grid-cols-1 min-w-[50px] items-center justify-around h-[7.5rem] rounded-xl m-6 w-[50px]">
+												<div class="mx-auto mt-2">
+													<img class="cursor-pointer" src="dist/assets/images/icon-plus.svg">
+												</div>
+												<div class="mx-auto mt-2">
+													<span class="font-bold text-[#484ba3] opacity-80"><%= element.score%></span>
+												</div>
+												<div class="mx-auto mb-2"><img class="cursor-pointer" src="dist/assets/images/icon-minus.svg"></div>
+											</div>
+											<div class="comment_details">
+												<div class="details flex items-center gap-4 mt-6 mb-3">
+													<span class="user_img"><img class="w-[2.5rem]" src="dist/assets/images/avatars/image-<%= element.username %>.png"></span>
+													<span class="user_name text-[#324152] font-bold opacity-90"><%= element.username %></span>
+													<span class="you hide bg-blue-600 text-white px-1">you</span>
+													<span class="comment-date text-[#324152cd] font-light opacity-50">1 weeks ago</span>
+												</div>
+												<div class="comment_paragraph mr-6">
+													<p><%= element.content %></p>
+												</div>
+											</div>
+											<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide">
+												<span><img src="dist/assets/images/icon-reply.svg"></span>
+												<span class="font-bold text-[#484ba3] opacity-80 ml-3">Reply</span>
+											</div>
+											<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
+						<div class="flex">
+							<div class="my-auto">
+								<img src="dist/assets/images/icon-delete.svg">
+							</div>
+							<span class="font-bold text-[#ed6468] ml-2">Delete</span>
+						</div>
+						<div class="flex">
+							<div class="my-auto">
+								<img src="dist/assets/images/icon-edit.svg">
+							</div>
+							<p class="font-bold text-[#484ba3] ml-2">Edit</p>
+						</div>
+					</div>
+										</div>
+									</div>
+									<div>
+										<% let replies = element.replies %>
+										<% if (replies!==0) { %>
+											<% pasteReplies(replies)%>
+										<% } %> 
+									</div>
+								</div>
+							<% }) %>
+					<% } %> 
+				<% } %>
+			</div>
+		</div>
+		<% }) %>
+		<% } %>
+
+		<% pasteComment(comments) %> 
+
+	</main>
+
+	<div class="comment-box bg-white min-h-[150px] rounded-xl mb-6 p-6 w-[725px] mx-auto">
+		<form action="/" method="post" class="flex justify justify-between min-h-[140px]">
+			<input type="hidden" name="_id" value="<%= userInfo.id %>">
+			<div>
+				<img class="w-[3rem]" src="../dist/assets/images/avatars/image-<%= userInfo.username %>.webp">
+			</div>
+			<div class="min-h-[140px]">
+				<textarea type="text" name="comment" id="newComment" class="
+				w-[500px]
+				h-[100%]
+				px-3
+				py-1.5
+				text-base
+				text-start
+				font-normal
+				text-gray-700
+				bg-white
+				border border-solid border-gray-300
+				rounded-md
+				transition
+				ease-in-out
+				m-0
+				focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+			 " placeholder="Add a comment..."></textarea>
+			</div>
+			<div>
+				<button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit">Send</button>
+			</div>
+		</form>
+	</div>
+   <script src="../dist/scripts/<%= path %>.js"></script>
+</body>

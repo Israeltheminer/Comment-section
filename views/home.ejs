@@ -1,0 +1,19 @@
+<body class="bg-[#f5f6fa]">
+   <main class="max-w-[600px] bg-white mt-[6rem] mx-auto rounded-xl divide-y">
+      <% user_info.forEach(element => { %>
+         <form action="/" method="post">
+            <div class="flex items-center" id="<%= element._id %>">
+               <input type="hidden" name="username" value="<%= element.username %>">
+               <input type="hidden" name="id" value="<%= element._id %>">
+               <div class="mx-8 my-4 user_image">
+                  <img class="w-12" src="dist/assets/images/avatars/image-<%= element.username %>.png" alt="user image">
+               </div>
+               <div class="user_name">
+                  <p class="text-xl font-extrabold opacity-70 hover:opacity-100 cursor-pointer text-[#484ba3]"><%= element.username %></p>
+               </div>
+            </div>
+         </form>
+      <% }) %>
+   </main>
+   <script src="../dist/scripts/<%= path %>.js"></script>
+</body>
