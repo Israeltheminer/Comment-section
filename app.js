@@ -70,9 +70,14 @@ app.get("/", (req, res)=> {
          let allCommentInfo = fetchComment(mainComments, allCommentArray)
          let fetchFieldArray = []
          let allFieldInfo = fetchField(allCommentInfo, fetchFieldArray, "_id", "username")
+         let usernames = []
+         allFieldInfo.forEach(items=> {
+            usernames.push(items.username)
+         })
+         let user_info = [...new Set(usernames)]
          res.render("home", {
             path: "home",
-            user_info: allFieldInfo
+            user_info
          })
       } catch (error) {
          console.log(error)
@@ -93,10 +98,10 @@ app.get('/comment', (req, res) => {
       try {
          let mainComments = await COMMENT.find()
          let userInfoCookies = req.cookies.userInfo
-         let userInfo = JSON.parse(userInfoCookies)
+         let username = JSON.parse(userInfoCookies)
          res.render("comment", {
             path: "comment",
-            userInfo: userInfo,
+            username,
             comments: mainComments
          })
       } catch (error) {
@@ -104,13 +109,87 @@ app.get('/comment', (req, res) => {
       }
    }
 })
+app.post('/post', (req, res) => {
+   update()
+   async function update() {
+      try {
+         let username = req.body.username
+         let replied_id = req.body.replied_id
+         let replied_user = req.body.replied_user
+         let content = req.body.comment
+
+         if(replied_id==="" || replied_user===""){
+            await COMMENT.create({
+               content,
+               username
+            })
+         }else{
+            let nestedReply = await COMMENT.find({ "replies._id": replied_id })
+            let reply = await COMMENT.find({_id: replied_id})
+            let comment =  {
+               content,
+               username,
+               replyingTo: replied_user
+            }
+            if(nestedReply.length===0){
+               await COMMENT.updateOne({ _id: replied_id }, 
+                  {
+                     $push: {
+                        replies: comment
+                     } 
+                  }
+               )
+            }
+            if(reply.length===0){
+               await COMMENT.updateOne({ "replies._id": replied_id }, 
+                  {
+                     $push: {
+                        replies: comment
+                     } 
+                  }
+               )
+            }
+            res.redirect("/comment")
+         }
+      } catch (error) {
+         console.log(error)
+      }
+   }
+})
+app.post("/delete", (req, res)=> {
+   destroy()
+   async function destroy() {
+      try {
+         let id = req.body.id
+         let reply = await COMMENT.find({_id: id})
+         let nestedReply = await COMMENT.find({ "replies._id": id })
+         if(reply.length!==0){
+            await COMMENT.deleteOne({_id: id})
+         }
+         if(nestedReply.length!==0){
+            await COMMENT.updateOne({"replies._id": id},
+            {
+               $pull: {
+                  replies: {_id: id}
+               } 
+            })
+         }
+         res.redirect("/comment")
+         
+      } catch (error) {
+         console.log(error)
+      }
+   }
+})
+
 
 app.get('/data', (req, res) => {
    fetch()
    async function fetch() {
       try {
-         let mainComments = await COMMENT.find()
-         res.json(mainComments)
+         let reply = await COMMENT.find()
+         let comment = await COMMENT.find({_id: "62c55c5083d38615692cfcc0"})
+         res.json(reply)
       } catch (error) {
          console.log(error)
       }

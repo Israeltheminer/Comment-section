@@ -19,23 +19,28 @@
 						<div class="details flex items-center gap-4 mt-6 mb-3">
 							<span class="user_img"><img class="w-[2.5rem]" src="dist/assets/images/avatars/image-<%= element.username %>.png"></span>
 							<span class="user_name text-[#324152] font-bold opacity-90"><%= element.username %></span>
-							<span class="you hide bg-blue-600 text-white px-1">you</span>
+							<span class="you <%= element.username %> hide bg-blue-600 text-white px-1 ">you</span>
 							<span class="comment-date text-[#324152cd] font-light opacity-50">1 month ago</span>
 						</div>
 						<div class="comment_paragraph mr-6">
 							<p><%= element.content %></p>
 						</div>
 					</div>
-					<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide">
+					<div class="reply_button <%= element.username %> absolute top-6 right-6 flex items-center cursor-pointer hide">
+						<input class="username" type="hidden" name="username" value="<%= element.username %>">
+						<input class="id" type="hidden" name="id" value="<%= element._id %>">
 						<span><img src="dist/assets/images/icon-reply.svg"></span>
 						<span class="font-bold text-[#484ba3] opacity-80 ml-3">Reply</span>
 					</div>
-					<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
+					<div class="user_edits <%= element.username %> absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
 						<div class="flex">
-							<div class="my-auto">
-								<img src="dist/assets/images/icon-delete.svg">
-							</div>
-							<span class="font-bold text-[#ed6468] ml-2">Delete</span>
+							<form action="/delete" method="post" class="flex delete_form">
+								<input class="id" type="hidden" name="id" value="<%= element._id %>">
+								<div class="my-auto">
+									<img src="dist/assets/images/icon-delete.svg">
+								</div>
+								<span class="font-bold text-[#ed6468] ml-2">Delete</span>
+							</form>
 						</div>
 						<div class="flex">
 							<div class="my-auto">
@@ -68,31 +73,36 @@
 												<div class="details flex items-center gap-4 mt-6 mb-3">
 													<span class="user_img"><img class="w-[2.5rem]" src="dist/assets/images/avatars/image-<%= element.username %>.png"></span>
 													<span class="user_name text-[#324152] font-bold opacity-90"><%= element.username %></span>
-													<span class="you hide bg-blue-600 text-white px-1">you</span>
+													<span class="you <%= element.username %> hide bg-blue-600 text-white px-1">you</span>
 													<span class="comment-date text-[#324152cd] font-light opacity-50">1 weeks ago</span>
 												</div>
 												<div class="comment_paragraph mr-6">
 													<p><%= element.content %></p>
 												</div>
 											</div>
-											<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide">
+											<div class="reply_button <%= element.username %> absolute top-6 right-6 flex items-center cursor-pointer hide">
+												<input class="username" type="hidden" name="username" value="<%= element.username %>">
+												<input class="id" type="hidden" name="id" value="<%= element._id %>">
 												<span><img src="dist/assets/images/icon-reply.svg"></span>
 												<span class="font-bold text-[#484ba3] opacity-80 ml-3">Reply</span>
 											</div>
-											<div class="reply_button absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
-						<div class="flex">
-							<div class="my-auto">
-								<img src="dist/assets/images/icon-delete.svg">
-							</div>
-							<span class="font-bold text-[#ed6468] ml-2">Delete</span>
-						</div>
-						<div class="flex">
-							<div class="my-auto">
-								<img src="dist/assets/images/icon-edit.svg">
-							</div>
-							<p class="font-bold text-[#484ba3] ml-2">Edit</p>
-						</div>
-					</div>
+											<div class="user_edits <%= element.username %> absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
+												<div class="flex">
+													<form action="/delete" method="post" class="flex delete_form">
+														<input class="id" type="hidden" name="id" value="<%= element._id %>">
+														<div class="my-auto">
+															<img src="dist/assets/images/icon-delete.svg">
+														</div>
+														<span class="font-bold text-[#ed6468] ml-2">Delete</span>
+													</form>
+												</div>
+												<div class="flex">
+													<div class="my-auto">
+														<img src="dist/assets/images/icon-edit.svg">
+													</div>
+													<p class="font-bold text-[#484ba3] ml-2">Edit</p>
+												</div>
+											</div>
 										</div>
 									</div>
 									<div>
@@ -114,11 +124,24 @@
 
 	</main>
 
-	<div class="comment-box bg-white min-h-[150px] rounded-xl mb-6 p-6 w-[725px] mx-auto">
-		<form action="/" method="post" class="flex justify justify-between min-h-[140px]">
-			<input type="hidden" name="_id" value="<%= userInfo.id %>">
+	<div class="comment-box bg-white min-h-[150px] rounded-xl mb-6 p-6 w-[725px] mx-auto" id="comment_box">
+		<form action="/post" method="post" class="flex justify justify-between min-h-[140px]">
+			<input type="hidden" name="username" value="<%= username.username %>">
+			<input id="replied_id" type="hidden" name="replied_id" value="">
+			<input id="replied_user" type="hidden" name="replied_user" value="">
 			<div>
-				<img class="w-[3rem]" src="../dist/assets/images/avatars/image-<%= userInfo.username %>.webp">
+				<img class="w-[3rem]" src="dist/assets/images/avatars/image-<%= username.username %>.webp">
+				<div class="reply-info hide">
+					<div class="block">
+						<div class="mx-auto border-l border-dashed border-purple-600 h-10 w-[2px]"></div>
+					</div>
+					<div class="relative replied-user">
+						<img class="w-[3rem] reply-image">
+						<div class="absolute top-[-0.5rem] right-[-4px] cursor-pointer cancel_reply_button">
+							<img class="w-6" src="dist/assets/images/icon-cancel.svg">
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="min-h-[140px]">
 				<textarea type="text" name="comment" id="newComment" class="
@@ -136,13 +159,13 @@
 				transition
 				ease-in-out
 				m-0
-				focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-			 " placeholder="Add a comment..."></textarea>
+				focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+				placeholder="Add a comment..." name="content"></textarea>
 			</div>
 			<div>
 				<button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit">Send</button>
 			</div>
 		</form>
 	</div>
-   <script src="../dist/scripts/<%= path %>.js"></script>
+   <script src="dist/scripts/<%= path %>.js"></script>
 </body>
