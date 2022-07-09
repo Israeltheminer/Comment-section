@@ -32,6 +32,34 @@ $(".cancel_reply_button").on("click", function(){
    $("#replied_user").val("")
 })
 
-$(".delete_form").on("click", function(){
-   $(this).submit()
+$(".delete_icon").on("click", function(){
+   let id = $(this).find(".id").val()
+   $("#delete_modal").find("#deleted_id").val(id)
+   $(".delete_modal").removeClass("hide")
+   window.scrollTo(0,0)
+})
+
+$(".delete_button").on("click", function(){
+   $("#delete_modal").submit()
+})
+
+$(".delete .cancel_button").on("click", function(){
+   $(".delete_modal").addClass("hide")
+})
+
+$(".edit_icon").on("click", function(){
+   let id = $(this).find(".id").val()
+   let content = $(this).find(".content").val()
+   $("#edit_modal").find("#edited_id").val(id)
+   $("#edit_modal").find("#edited_content").val(content)
+   $(".edit_modal").removeClass("hide")
+   window.scrollTo(0,0)
+})
+
+$(".edit_button").on("click", function(){
+   $("#edit_modal").submit()
+})
+
+$(".edit .cancel_button").on("click", function(){
+   $(".edit_modal").addClass("hide")
 })

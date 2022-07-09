@@ -182,6 +182,36 @@ app.post("/delete", (req, res)=> {
    }
 })
 
+app.post("/edit", (req, res)=> {
+   update()
+   async function update() {
+      try {
+         let id = req.body.id
+         let content = req.body.content
+         let reply = await COMMENT.find({_id: id})
+         let nestedReply = await COMMENT.find({ "replies._id": id })
+         if(reply.length!==0){
+            await COMMENT.updateOne({ _id: id }, 
+               {
+                  content
+               }
+            )
+         }
+         if(nestedReply.length!==0){
+            await COMMENT.updateOne({ "replies._id": id }, 
+            { 
+               "$set": {
+                  "replies.$.content": content
+               }
+           })
+         }
+         res.redirect("/comment")
+         
+      } catch (error) {
+         console.log(error)
+      }
+   }
+})
 
 app.get('/data', (req, res) => {
    fetch()

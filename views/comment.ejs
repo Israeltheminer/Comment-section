@@ -1,6 +1,11 @@
-<body class="bg-[#f5f6fa]">
-	
+<body class="bg-[#f5f6fa] relative">
+
 	<main class="w-[725px] mx-auto my-[4rem]">
+		<div class="ml-1 w-fit">
+			<a href="/">
+				<img class="w-[40px]" src="../dist/assets/images/icon-home.svg">
+			</a>
+		</div>
 		<% function pasteComment(array){ %>
 		<% 	array.forEach(element => { %>
 		<div class="comment-section">
@@ -34,15 +39,17 @@
 					</div>
 					<div class="user_edits <%= element.username %> absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
 						<div class="flex">
-							<form action="/delete" method="post" class="flex delete_form">
+							<div class="flex delete_icon">
 								<input class="id" type="hidden" name="id" value="<%= element._id %>">
 								<div class="my-auto">
 									<img src="dist/assets/images/icon-delete.svg">
 								</div>
 								<span class="font-bold text-[#ed6468] ml-2">Delete</span>
-							</form>
+							</div>
 						</div>
-						<div class="flex">
+						<div class="flex edit_icon">
+							<input class="id" type="hidden" name="id" value="<%= element._id %>">
+							<input class="content" type="hidden" name="content" value="<%= element.content %>">
 							<div class="my-auto">
 								<img src="dist/assets/images/icon-edit.svg">
 							</div>
@@ -77,7 +84,7 @@
 													<span class="comment-date text-[#324152cd] font-light opacity-50">1 weeks ago</span>
 												</div>
 												<div class="comment_paragraph mr-6">
-													<p><%= element.content %></p>
+													<p><span class="text-blue-700 font-semibold">@<%= element.replyingTo %> </span> <%= element.content %></p>
 												</div>
 											</div>
 											<div class="reply_button <%= element.username %> absolute top-6 right-6 flex items-center cursor-pointer hide">
@@ -88,15 +95,17 @@
 											</div>
 											<div class="user_edits <%= element.username %> absolute top-6 right-6 flex items-center cursor-pointer hide gap-6">
 												<div class="flex">
-													<form action="/delete" method="post" class="flex delete_form">
+													<div class="flex delete_icon">
 														<input class="id" type="hidden" name="id" value="<%= element._id %>">
 														<div class="my-auto">
 															<img src="dist/assets/images/icon-delete.svg">
 														</div>
 														<span class="font-bold text-[#ed6468] ml-2">Delete</span>
-													</form>
+													</div>
 												</div>
-												<div class="flex">
+												<div class="flex edit_icon">
+													<input class="id" type="hidden" name="id" value="<%= element._id %>">
+													<input class="content" type="hidden" name="content" value="<%= element.content %>">
 													<div class="my-auto">
 														<img src="dist/assets/images/icon-edit.svg">
 													</div>
@@ -166,6 +175,43 @@
 				<button class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" type="submit">Send</button>
 			</div>
 		</form>
+	</div>
+	<div class="delete_modal bg-gray-600/30 backdrop-blur-sm w-[100%] h-[120%] absolute left-0 top-[-64px] hide">
+		<div class="confirmation_box w-[350px] mx-auto mt-[30vh] rounded-lg bg-white">
+			<form class="p-6" action="/delete" method="post" id="delete_modal">
+				<input type="hidden" name="id" value="" id="deleted_id">
+				<div class=" bg-white">
+					<h1 class="text-2xl font-bold opacity-90 text-[#3b4045]">Delete Comment</h1>
+					<p class="text-sm tracking-wider opacity-80 leading-relaxed my-4">Are you sure you want to remove this comment? This will remove the comment and can't be undone.</p>
+					<div class="grid grid-cols-2 gap-4 delete">
+						<div class="cancel_button bg-[#3b4045] py-2 text-center rounded-md cursor-pointer">
+							<span class="text-white mx-auto ">NO, CANCEL</span>
+						</div>
+						<div class="delete_button bg-[#ff6469] py-2 text-center rounded-md cursor-pointer">
+							<span class="text-white mx-auto ">YES, DELETE</span>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="edit_modal bg-gray-600/30 backdrop-blur-sm w-[100%] h-[120%] absolute left-0 top-[-64px] hide">
+		<div class="confirmation_box w-[40%] min-w-[300px] mx-auto mt-[30vh] rounded-lg bg-white">
+			<form class="p-6" action="/edit" method="post" id="edit_modal">
+				<input type="hidden" name="id" value="" id="edited_id">
+				<div class=" bg-white">
+					<textarea name="content" id="edited_content"  class=" w-[100%] min-h-[150px] px-3 py-1.5 text-base text-start font-normal text-gray-700 bg-white border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"></textarea>
+					<div class="grid grid-cols-2 gap-4 edit">
+						<div class="cancel_button bg-[#3b4045] py-2 text-center rounded-md cursor-pointer">
+							<span class="text-white mx-auto ">NO, CANCEL</span>
+						</div>
+						<div class="edit_button bg-[#ff6469] py-2 text-center rounded-md cursor-pointer">
+							<span class="text-white mx-auto ">YES, EDIT</span>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
    <script src="dist/scripts/<%= path %>.js"></script>
 </body>
