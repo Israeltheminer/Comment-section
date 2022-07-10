@@ -1,18 +1,20 @@
 <body class="bg-[#f5f6fa]">
-   <main class="max-w-[600px] bg-white mt-[6rem] mx-auto rounded-xl divide-y">
-      <% user_info.forEach(element => { %>
-         <form action="/" method="post">
-            <div class="flex items-center">
-               <input type="hidden" name="username" value="<%= element %>">
-               <div class="mx-8 my-4 user_image">
-                  <img class="w-12" src="dist/assets/images/avatars/image-<%= element %>.png" alt="user image">
+   <main class="px-6">
+      <div class="max-w-[600px] bg-white mt-[6rem] mx-auto rounded-xl divide-y">
+         <% user_info.forEach(element => { %>
+            <form action="/" method="post">
+               <div class="flex items-center">
+                  <input type="hidden" name="username" value="<%= element %>">
+                  <div class="mx-8 my-4 xs:mx-6 xs:my-[8px] user_image">
+                     <img class="w-12 xs:w-[38px]" src="dist/assets/images/avatars/image-<%= element %>.png" alt="user image">
+                  </div>
+                  <div class="user_name">
+                     <p class="text-xl font-extrabold opacity-70 hover:opacity-100 cursor-pointer text-[#484ba3] xs:text-[18px]"><%= element %></p>
+                  </div>
                </div>
-               <div class="user_name">
-                  <p class="text-xl font-extrabold opacity-70 hover:opacity-100 cursor-pointer text-[#484ba3]"><%= element %></p>
-               </div>
-            </div>
-         </form>
-      <% }) %>
+            </form>
+         <% }) %>
+      </div>
    </main>
    <script src="../dist/scripts/<%= path %>.js"></script>
 </body>
